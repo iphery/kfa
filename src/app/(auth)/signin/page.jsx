@@ -12,7 +12,7 @@ export default function page() {
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center">
-      <div className="flex w-full flex-col sm:w-1/3">
+      <div className="flex w-full flex-col p-2 sm:w-1/3">
         <div className="flex justify-center">
           <h1 className="mb-3 font-bold">BWF MAPPING</h1>
         </div>
