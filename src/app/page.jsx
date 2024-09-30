@@ -73,6 +73,7 @@ export default function page() {
       const data = await response.json();
       console.log(data.result);
       setProducts(data.result);
+      setFilterProduct(data.result);
     }
   };
 
@@ -92,10 +93,24 @@ export default function page() {
   const [inputData, setInputData] = useState({ barcode: "", code: "" });
   const [inputDataError, setInputDataerror] = useState([false, false]);
   const [onSubmit, setOnSubmit] = useState(false);
+  const [keyword, setKeyword] = useState("");
+  const [filterProduct, setFilterProduct] = useState([]);
 
   useEffect(() => {
     get_product();
   }, []);
+
+  useEffect(() => {
+    const filterData = products.filter((item) => {
+      const name =
+        item["existing_name"] &&
+        item["existing_name"].toLowerCase().includes(keyword.toLowerCase());
+
+      return name;
+    });
+
+    setFilterProduct(filterData);
+  }, [keyword]);
 
   return (
     <UserAuth>
@@ -104,7 +119,17 @@ export default function page() {
           <Navbar />
 
           <div className="p-5">
-            <div className="overflow-x-auto">
+            <div className="w-96">
+              <CommonInput
+                placeholder={"Search"}
+                input={keyword}
+                onInputChange={(val) => {
+                  setKeyword(val);
+                }}
+              />
+            </div>
+
+            <div className="mt-3 overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="">
@@ -117,8 +142,8 @@ export default function page() {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.length > 0 &&
-                    products.map((item, index) => {
+                  {filterProduct.length > 0 &&
+                    filterProduct.map((item, index) => {
                       return (
                         <tr key={index}>
                           <td className="border text-center">{index + 1}</td>
@@ -148,7 +173,6 @@ export default function page() {
                     })}
                 </tbody>
               </table>
-              <div onClick={get_token}>aaa</div>
             </div>
           </div>
         </div>
