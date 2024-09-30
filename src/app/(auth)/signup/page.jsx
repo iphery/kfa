@@ -8,7 +8,7 @@ export default function page() {
   const router = useRouter();
   const [data, setData] = useState({ name: "", email: "", password: "" });
   const [dataError, setDataError] = useState([false, false, false]);
-
+  //
   const register = async () => {
     console.log(dataError[0]);
     if (dataError[0] == "") {
