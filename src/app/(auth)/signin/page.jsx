@@ -11,7 +11,7 @@ export default function page() {
   const [onSubmit, setOnSubmit] = useState(false);
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
+    <div className="flex min-h-screen w-full items-center justify-center">
       <div className="flex w-full flex-col sm:w-1/3">
         <div className="flex justify-center">
           <h1 className="mb-3 font-bold">BWF MAPPING</h1>

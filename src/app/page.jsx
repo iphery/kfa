@@ -124,6 +124,7 @@ export default function page() {
                     })}
                 </tbody>
               </table>
+              <div onClick={get_token}>aaa</div>
             </div>
           </div>
         </div>
