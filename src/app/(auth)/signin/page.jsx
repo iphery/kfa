@@ -3,8 +3,10 @@ import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import { CommonInput } from "@/components/input";
 import { CommonButton } from "@/components/button";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function page() {
+  const router = useRouter();
   const login = async () => {};
   const [inputData, setInputData] = useState({ email: "", password: "" });
   const [inputDataError, setInputDataError] = useState([false, false]);
@@ -104,7 +106,14 @@ export default function page() {
         <div className="mb-2"></div>
         <div className="text-center text-sm">
           Don't have account ?{" "}
-          <span className="cursor-default hover:text-strokedark">Register</span>
+          <span
+            className="cursor-default hover:text-strokedark"
+            onClick={() => {
+              router.push("/signup");
+            }}
+          >
+            Register
+          </span>
         </div>
       </div>
     </div>

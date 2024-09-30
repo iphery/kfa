@@ -2,8 +2,10 @@
 import { useState } from "react";
 import { CommonInput } from "@/components/input";
 import { CommonButton } from "@/components/button";
+import { useRouter } from "next/navigation";
 
 export default function page() {
+  const router = useRouter();
   const [data, setData] = useState({ name: "", email: "", password: "" });
   const [dataError, setDataError] = useState([false, false, false]);
 
@@ -27,7 +29,7 @@ export default function page() {
 
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <div className="flex w-full flex-col sm:w-1/3">
+      <div className="flex w-full flex-col p-2 sm:w-1/3">
         <CommonInput
           placeholder={"Name"}
           input={data.name}
@@ -161,7 +163,14 @@ export default function page() {
         <div className="mb-2"></div>
         <div className="text-center text-sm">
           Already have account ?{" "}
-          <span className="cursor-default hover:text-strokedark">Login</span>
+          <span
+            className="cursor-default hover:text-strokedark"
+            onClick={() => {
+              router.push("/");
+            }}
+          >
+            Login
+          </span>
         </div>
       </div>
     </div>

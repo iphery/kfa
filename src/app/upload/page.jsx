@@ -7,7 +7,8 @@ export default function page() {
   const [file, setFile] = useState();
   const [onSubmit, setOnSubmit] = useState(false);
 
-  const send_file = async () => {
+  const send_file = async (e) => {
+    e.preventDefault();
     setOnSubmit(true);
     if (!file) {
       alert("Please select a file!");
@@ -57,7 +58,12 @@ export default function page() {
         }}
       />
       <div className="mb-3"></div>
-      <CommonButton label={"Upload"} onClick={send_file} />
+      <CommonButton
+        label={"Upload"}
+        onClick={send_file}
+        onload={onSubmit}
+        disabled={onSubmit}
+      />
     </div>
   );
 }

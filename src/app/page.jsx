@@ -58,6 +58,24 @@ export default function page() {
     console.log(response.data);
   };
 
+  const [products, setProducts] = useState([]);
+
+  const get_product = async () => {
+    const response = await fetch("https://lime.farmaguru.id/product", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    if (response.status == 200) {
+      const data = await response.json();
+      console.log(data.result);
+      setProducts(data.result);
+    }
+  };
+
   const data = [
     {
       id_product: "1",
@@ -75,15 +93,19 @@ export default function page() {
   const [inputDataError, setInputDataerror] = useState([false, false]);
   const [onSubmit, setOnSubmit] = useState(false);
 
+  useEffect(() => {
+    get_product();
+  }, []);
+
   return (
     <UserAuth>
       <div className="relative">
         <div className="absolute  z-0 h-full w-full">
           <Navbar />
 
-          <div className="">
-            <div className="p-5">
-              <table className="w-full ">
+          <div className="p-5">
+            <div className="overflow-x-auto">
+              <table className="w-full">
                 <thead>
                   <tr className="">
                     <th className="border">No</th>
@@ -95,12 +117,14 @@ export default function page() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.length > 0 &&
-                    data.map((item, index) => {
+                  {products.length > 0 &&
+                    products.map((item, index) => {
                       return (
                         <tr key={index}>
                           <td className="border text-center">{index + 1}</td>
-                          <td className="border px-2">{item["name"]}</td>
+                          <td className="border px-2">
+                            {item["existing_name"]}
+                          </td>
                           <td className="border px-2">{item["barcode"]}</td>
                           <td className="border px-2">{item["created_by"]}</td>
                           <td className="border px-2">{item["created_at"]}</td>
@@ -108,7 +132,7 @@ export default function page() {
                             <div
                               onClick={() => {
                                 setSelectedData({
-                                  name: item["name"],
+                                  name: item["existing_name"],
                                   barcode: item["barcode"],
                                   kfa: item["kfa"],
                                 });
