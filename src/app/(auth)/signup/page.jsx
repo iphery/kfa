@@ -152,6 +152,7 @@ export default function page() {
               if (response.status == 200) {
                 console.log("ok");
                 const result = await response.json();
+                router.push("/");
               } else {
                 console.log("noke");
               }
