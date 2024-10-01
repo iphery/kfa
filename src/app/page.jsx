@@ -8,6 +8,7 @@ import { FaRegEdit } from "react-icons/fa";
 import { CommonButton } from "@/components/button";
 import Navbar from "@/components/navbar";
 import UserAuth from "@/components/auth";
+import { CustomSelect } from "@/components/select";
 
 export default function page() {
   const get_token = async () => {
@@ -97,6 +98,7 @@ export default function page() {
     barcode: "",
     kfa: "",
     name: "",
+    type: "",
   });
   const [inputDataError, setInputDataerror] = useState([false, false, false]);
   const [onSubmit, setOnSubmit] = useState(false);
@@ -132,6 +134,11 @@ export default function page() {
     });
   };
 
+  const optionData = [
+    { label: "Obat Keras", value: "Obat Keras" },
+    { label: "Obat Lunak", value: "Obat Lunak" },
+  ];
+
   return (
     <UserAuth>
       <div className="relative">
@@ -157,7 +164,7 @@ export default function page() {
                     <th className="border px-2">Nama</th>
                     <th className="border px-2">Barcode</th>
                     <th className="border px-2">Kode KFA</th>
-                    <th className="border px-2">Golongan</th>
+                    <th className="border px-2">Kategori</th>
                     <th className="border px-2">Updated By</th>
                     <th className="border  px-2">Updated At</th>
 
@@ -195,6 +202,7 @@ export default function page() {
                                       item["id_kfa"] == null
                                         ? ""
                                         : item["id_kfa"],
+                                    type: item["type"],
                                   });
                                   setInputData((prev) => ({
                                     ...prev,
@@ -205,6 +213,7 @@ export default function page() {
                                       item["id_kfa"] == null
                                         ? ""
                                         : item["id_kfa"],
+                                    type: item["type"],
                                   }));
                                   setModalEdit(true);
                                 }}
@@ -280,7 +289,21 @@ export default function page() {
               setInputDataerror(newdata);
             }}
           ></CommonInput>
+          <div className="mb-1 mt-3">Kategori</div>
+          <CustomSelect
+            optionData={optionData}
+            placeholder={selectedData.type}
+            onSelected={(option) => {
+              console.log(option);
+              if (option != null) {
+                setInputData((prev) => ({ ...prev, type: option.value }));
+              } else {
+                setInputData((prev) => ({ ...prev, type: "" }));
+              }
+            }}
+          />
           <div className="mb-5"></div>
+
           <CommonButton
             label={"Submit"}
             onload={onSubmit}
