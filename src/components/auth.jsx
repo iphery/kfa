@@ -14,6 +14,8 @@ export default function UserAuth({ children }) {
       const result = await response.json();
       if (result["result"] == "Authorized") {
         setLogin(true);
+        console.log(result["username"]);
+        localStorage.setItem("username", result["username"]);
       } else {
         setLogin(false);
       }
