@@ -25,6 +25,7 @@ const GroupOptionWithSub = (props) => {
 export const CustomSelect = ({
   optionData,
   placeholder,
+  setValue,
   onSelected,
   error,
   errorMessage,
@@ -61,6 +62,7 @@ export const CustomSelect = ({
         onChange={(option) => {
           onSelected(option);
         }}
+        value={setValue}
         isSearchable={true}
         isClearable={true}
         options={optionData}

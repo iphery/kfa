@@ -79,6 +79,7 @@ export default function page() {
       setFilterProduct(data.result);
       setIdUser(data.user);
       console.log(data.category);
+      console.log(data.result);
 
       const categories = data.category;
       const newcategory = [];
@@ -106,6 +107,10 @@ export default function page() {
 
   const [modalEdit, setModalEdit] = useState(false);
   const [selectedData, setSelectedData] = useState({});
+  const [selectedOption, setSelectedOption] = useState({
+    label: "",
+    value: "",
+  });
   const [inputData, setInputData] = useState({
     barcode: "",
     kfa: "",
@@ -227,6 +232,15 @@ export default function page() {
                                         : item["id_kfa"],
                                     category: item["category"],
                                   }));
+
+                                  setSelectedOption((prev) => ({
+                                    ...prev,
+                                    label: item["category"],
+                                    value: item["id_category"],
+                                  }));
+                                  console.log(item["category"]);
+                                  console.log(item["id_category"]);
+                                  console.log(selectedOption);
                                   setModalEdit(true);
                                 }}
                                 className="flex cursor-default justify-center hover:text-strokedark"
@@ -304,24 +318,26 @@ export default function page() {
           <div className="mb-1 mt-3">Kategori</div>
           <CustomSelect
             optionData={category}
-            placeholder={selectedData.category}
+            setValue={selectedOption}
             onSelected={(option) => {
               console.log(option);
               if (option != null) {
                 setInputData((prev) => ({ ...prev, type: option.value }));
+                setSelectedOption((prev) => ({
+                  ...prev,
+                  label: option.label,
+                  value: option.value,
+                }));
               } else {
                 setInputData((prev) => ({ ...prev, type: "" }));
+                setSelectedOption((prev) => ({
+                  ...prev,
+                  label: "",
+                  value: "",
+                }));
               }
             }}
           />
-          <div
-            onClick={() => {
-              console.log(inputData);
-            }}
-          >
-            aa
-          </div>
-          <div className="mb-5"></div>
 
           <CommonButton
             label={"Submit"}
