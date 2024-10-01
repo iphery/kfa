@@ -59,6 +59,7 @@ export default function page() {
   };
 
   const [products, setProducts] = useState([]);
+  const [idUser, setIdUser] = useState("");
 
   const get_product = async () => {
     const response = await fetch("https://lime.farmaguru.id/product", {
@@ -71,9 +72,11 @@ export default function page() {
 
     if (response.status == 200) {
       const data = await response.json();
-      console.log(data.result);
+
       setProducts(data.result);
       setFilterProduct(data.result);
+      setIdUser(data.user);
+      console.log(data.result);
     }
   };
 
@@ -90,8 +93,12 @@ export default function page() {
 
   const [modalEdit, setModalEdit] = useState(false);
   const [selectedData, setSelectedData] = useState({});
-  const [inputData, setInputData] = useState({ barcode: "", code: "" });
-  const [inputDataError, setInputDataerror] = useState([false, false]);
+  const [inputData, setInputData] = useState({
+    barcode: "",
+    kfa: "",
+    name: "",
+  });
+  const [inputDataError, setInputDataerror] = useState([false, false, false]);
   const [onSubmit, setOnSubmit] = useState(false);
   const [keyword, setKeyword] = useState("");
   const [filterProduct, setFilterProduct] = useState([]);
@@ -111,6 +118,19 @@ export default function page() {
 
     setFilterProduct(filterData);
   }, [keyword]);
+
+  const formatdate = (isoDateString) => {
+    const date = new Date(isoDateString);
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
+  };
 
   return (
     <UserAuth>
@@ -133,12 +153,15 @@ export default function page() {
               <table className="w-full">
                 <thead>
                   <tr className="">
-                    <th className="border">No</th>
-                    <th className="border">Nama</th>
-                    <th className="border">Barcode</th>
-                    <th className="border">Created By</th>
-                    <th className="border">Created At</th>
-                    <th className="border">Opsi</th>
+                    <th className="border px-2">No</th>
+                    <th className="border px-2">Nama</th>
+                    <th className="border px-2">Barcode</th>
+                    <th className="border px-2">Kode KFA</th>
+                    <th className="border px-2">Golongan</th>
+                    <th className="border px-2">Updated By</th>
+                    <th className="border  px-2">Updated At</th>
+
+                    <th className="border px-2">Opsi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -151,22 +174,47 @@ export default function page() {
                             {item["existing_name"]}
                           </td>
                           <td className="border px-2">{item["barcode"]}</td>
-                          <td className="border px-2">{item["created_by"]}</td>
-                          <td className="border px-2">{item["created_at"]}</td>
+                          <td className="border px-2">{item["id_kfa"]}</td>
+                          <td className="border px-2">{item["type"]}</td>
+                          <td className="border px-2">{item["username"]}</td>
+                          <td className="border px-2 text-sm">
+                            {item["updated_at"] == null
+                              ? ""
+                              : formatdate(item["updated_at"])}
+                          </td>
+
                           <td className="border ">
-                            <div
-                              onClick={() => {
-                                setSelectedData({
-                                  name: item["existing_name"],
-                                  barcode: item["barcode"],
-                                  kfa: item["kfa"],
-                                });
-                                setModalEdit(true);
-                              }}
-                              className="flex cursor-default justify-center hover:text-strokedark"
-                            >
-                              <FaRegEdit />
-                            </div>
+                            {item["updated_by"] == null ||
+                            item["updated_by"] == idUser ? (
+                              <div
+                                onClick={() => {
+                                  setSelectedData({
+                                    name: item["existing_name"],
+                                    barcode: item["barcode"],
+                                    kfa:
+                                      item["id_kfa"] == null
+                                        ? ""
+                                        : item["id_kfa"],
+                                  });
+                                  setInputData((prev) => ({
+                                    ...prev,
+                                    id_product: item["id_product"],
+                                    name: item["existing_name"],
+                                    barcode: item["barcode"],
+                                    kfa:
+                                      item["id_kfa"] == null
+                                        ? ""
+                                        : item["id_kfa"],
+                                  }));
+                                  setModalEdit(true);
+                                }}
+                                className="flex cursor-default justify-center hover:text-strokedark"
+                              >
+                                <FaRegEdit />
+                              </div>
+                            ) : (
+                              <></>
+                            )}
                           </td>
                         </tr>
                       );
@@ -181,24 +229,48 @@ export default function page() {
           isVisible={modalEdit}
           isSmallWidth="sm"
           onClose={() => {
+            setInputDataerror([false, false, false]);
             setModalEdit(false);
           }}
         >
           <h1 className="mb-5 font-bold">{`EDIT - ${selectedData.name}`}</h1>
-          <div className="mb-1">Barcode</div>
+          <div className="mb-1">Nama</div>
           <CommonInput
-            placeholder={selectedData.barcode}
+            //placeholder={selectedData.name}
+            input={inputData.name}
+            onInputChange={(val) => {
+              setInputData((prev) => ({ ...prev, name: val }));
+            }}
+            error={inputDataError[2]}
+            errorMessage={"Required"}
+            onChg={() => {
+              const newdata = [...inputDataError];
+              newdata[2] = false;
+              setInputDataerror(newdata);
+            }}
+          ></CommonInput>
+          <div className="mb-1 mt-3">Barcode</div>
+          <CommonInput
+            //placeholder={selectedData.barcode}
             input={inputData.barcode}
             onInputChange={(val) => {
               setInputData((prev) => ({ ...prev, barcode: val }));
+            }}
+            error={inputDataError[0]}
+            errorMessage={"Required"}
+            onChg={() => {
+              const newdata = [...inputDataError];
+              newdata[0] = false;
+              setInputDataerror(newdata);
             }}
           ></CommonInput>
           <div className="mb-1 mt-3">Kode KFA</div>
 
           <CommonInput
-            placeholder={selectedData.kfa}
+            //placeholder={selectedData.kfa}
+            input={inputData.kfa}
             onInputChange={(val) => {
-              setInputData((prev) => ({ ...prev, code: val }));
+              setInputData((prev) => ({ ...prev, kfa: val }));
             }}
             error={inputDataError[1]}
             errorMessage={"Required"}
@@ -217,20 +289,74 @@ export default function page() {
               e.preventDefault();
 
               setOnSubmit(true);
-              let localError = [false, false];
-              if (inputData.code == "" && selectedData.kfa == "") {
-                const newdata = [...inputDataError];
+              let localError = [false, false, false];
+              const newdata = [...inputDataError];
+              if (inputData.barcode == "") {
+                newdata[0] = true;
+                setInputDataerror(newdata);
+                localError = newdata;
+              } else {
+                newdata[0] = false;
+                setInputDataerror(newdata);
+                localError = newdata;
+              }
+
+              if (inputData.kfa == "") {
                 newdata[1] = true;
                 setInputDataerror(newdata);
                 localError = newdata;
               } else {
-                const newdata = [...inputDataError];
                 newdata[1] = false;
                 setInputDataerror(newdata);
                 localError = newdata;
               }
 
+              if (inputData.name == "") {
+                newdata[2] = true;
+                setInputDataerror(newdata);
+                localError = newdata;
+              } else {
+                newdata[2] = false;
+                setInputDataerror(newdata);
+                localError = newdata;
+              }
+
               if (!localError.includes(true)) {
+                console.log(inputData);
+                const response = await fetch(
+                  "https://lime.farmaguru.id/productupdate",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    credentials: "include",
+                    body: JSON.stringify({ data: inputData, user: idUser }),
+                  },
+                );
+
+                if (response.status == 200) {
+                  const result = await response.json();
+                  const updatedData = result.result[0];
+                  console.log(updatedData);
+                  const newproductdata = [...filterProduct];
+
+                  const newproducts = newproductdata.map((item) =>
+                    item.id_product === updatedData.id_product
+                      ? {
+                          ...item,
+                          existing_name: updatedData.existing_name,
+                          barcode: updatedData.barcode,
+                          id_kfa: updatedData.id_kfa,
+                          username: updatedData.username,
+                          updated_at: updatedData.updated_at,
+                        }
+                      : item,
+                  );
+                  setFilterProduct(newproducts);
+
+                  setModalEdit(false);
+                }
               }
               setOnSubmit(false);
             }}
