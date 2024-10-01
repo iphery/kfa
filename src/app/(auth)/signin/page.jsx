@@ -94,9 +94,11 @@ export default function page() {
                 if (result.error == 0) {
                   window.location.reload();
                 } else {
+                  alert(result.message);
                   //error client
                 }
               } else {
+                alert("Ups.. failed contacting server");
                 //ini error server
               }
             }
