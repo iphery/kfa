@@ -12,12 +12,16 @@ const Navbar = () => {
       <nav className="bg-white p-2">
         <div className="flex justify-between ">
           <h1>BWF - Mapping Data</h1>
-          <div className="flex items-center justify-start">
-            <div className="text-primary">
-              <IoPersonCircle />
+          {localStorage.getItem("username") != null ? (
+            <div className="flex items-center justify-start">
+              <div className="text-primary">
+                <IoPersonCircle />
+              </div>
+              <div className="ml-1 text-sm text-primary">{`${localStorage.getItem("username")}`}</div>
             </div>
-            <div className="ml-1 text-sm text-primary">{`${localStorage.getItem("username")}`}</div>
-          </div>
+          ) : (
+            <></>
+          )}
         </div>
       </nav>
     </div>
