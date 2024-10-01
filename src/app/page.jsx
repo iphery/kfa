@@ -61,6 +61,7 @@ export default function page() {
 
   const [products, setProducts] = useState([]);
   const [idUser, setIdUser] = useState("");
+  const [category, setCategory] = useState([]);
 
   const get_product = async () => {
     const response = await fetch("https://lime.farmaguru.id/product", {
@@ -77,7 +78,18 @@ export default function page() {
       setProducts(data.result);
       setFilterProduct(data.result);
       setIdUser(data.user);
-      console.log(data.result);
+      console.log(data.category);
+
+      const categories = data.category;
+      const newcategory = [];
+      categories.map((item) => {
+        newcategory.push({
+          label: item["description"],
+          value: item["id_category"],
+        });
+      });
+
+      setCategory(newcategory);
     }
   };
 
@@ -182,7 +194,7 @@ export default function page() {
                           </td>
                           <td className="border px-2">{item["barcode"]}</td>
                           <td className="border px-2">{item["id_kfa"]}</td>
-                          <td className="border px-2">{item["type"]}</td>
+                          <td className="border px-2">{item["category"]}</td>
                           <td className="border px-2">{item["username"]}</td>
                           <td className="border px-2 text-sm">
                             {item["updated_at"] == null
@@ -213,7 +225,7 @@ export default function page() {
                                       item["id_kfa"] == null
                                         ? ""
                                         : item["id_kfa"],
-                                    type: item["type"],
+                                    category: item["category"],
                                   }));
                                   setModalEdit(true);
                                 }}
@@ -291,8 +303,8 @@ export default function page() {
           ></CommonInput>
           <div className="mb-1 mt-3">Kategori</div>
           <CustomSelect
-            optionData={optionData}
-            placeholder={selectedData.type}
+            optionData={category}
+            placeholder={selectedData.category}
             onSelected={(option) => {
               console.log(option);
               if (option != null) {
@@ -302,6 +314,13 @@ export default function page() {
               }
             }}
           />
+          <div
+            onClick={() => {
+              console.log(inputData);
+            }}
+          >
+            aa
+          </div>
           <div className="mb-5"></div>
 
           <CommonButton
@@ -373,6 +392,7 @@ export default function page() {
                           id_kfa: updatedData.id_kfa,
                           username: updatedData.username,
                           updated_at: updatedData.updated_at,
+                          category: updatedData.category,
                         }
                       : item,
                   );

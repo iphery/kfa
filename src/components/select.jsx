@@ -50,11 +50,7 @@ export const CustomSelect = ({
     }),
     option: (baseStyles, { isFocused, isSelected }) => ({
       ...baseStyles,
-      backgroundColor: isSelected
-        ? "green"
-        : isFocused
-          ? "#80CAEE"
-          : "transparent", // Adds a slight background on hover for visibility
+      backgroundColor: isFocused ? "#80CAEE" : "transparent", // Adds a slight background on hover for visibility
     }),
   };
 
