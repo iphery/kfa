@@ -208,8 +208,7 @@ export default function page() {
                           </td>
 
                           <td className="border ">
-                            {item["updated_by"] == null ||
-                            item["updated_by"] == idUser ? (
+                            {true ? (
                               <div
                                 onClick={() => {
                                   setSelectedData({
