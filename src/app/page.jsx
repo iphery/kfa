@@ -139,7 +139,7 @@ export default function page() {
           <Navbar />
 
           <div className="p-5">
-            <div className="w-96">
+            <div className="w-full sm:w-96">
               <CommonInput
                 placeholder={"Search"}
                 input={keyword}
@@ -150,7 +150,7 @@ export default function page() {
             </div>
 
             <div className="mt-3 overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full ">
                 <thead>
                   <tr className="">
                     <th className="border px-2">No</th>

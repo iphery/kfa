@@ -1,1 +1,23 @@
-{}
+{
+  "components/Charts/ChartOne.tsx -> react-apexcharts": {
+    "id": 3865,
+    "files": [
+      "static/chunks/3975359d.849a03a6e6ec2766.js",
+      "static/chunks/865.72d297612860ea63.js"
+    ]
+  },
+  "components/Charts/ChartTwo.tsx -> react-apexcharts": {
+    "id": 3865,
+    "files": [
+      "static/chunks/3975359d.849a03a6e6ec2766.js",
+      "static/chunks/865.72d297612860ea63.js"
+    ]
+  },
+  "components/Charts/page.tsx -> @/components/Charts/ChartThree": {
+    "id": 9327,
+    "files": [
+      "static/chunks/3975359d.849a03a6e6ec2766.js",
+      "static/chunks/327.7b2b2e0059cef014.js"
+    ]
+  }
+}
