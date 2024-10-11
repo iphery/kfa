@@ -62,6 +62,9 @@ export default function page() {
   const [products, setProducts] = useState([]);
   const [idUser, setIdUser] = useState("");
   const [category, setCategory] = useState([]);
+  const [completed, setCompleted] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [percentage, setPercentage] = useState(0);
 
   const get_product = async () => {
     const response = await fetch("https://lime.farmaguru.id/product", {
@@ -80,6 +83,7 @@ export default function page() {
       setIdUser(data.user);
       console.log(data.category);
       console.log(data.result);
+      console.log(data.summary["total"]);
 
       const categories = data.category;
       const newcategory = [];
@@ -91,6 +95,9 @@ export default function page() {
       });
 
       setCategory(newcategory);
+      setCompleted(data.summary["completed"]);
+      setTotal(data.summary["total"]);
+      setPercentage(data.summary["percentage"]);
     }
   };
 
@@ -163,14 +170,17 @@ export default function page() {
           <Navbar />
 
           <div className="p-5">
-            <div className="w-full sm:w-96">
-              <CommonInput
-                placeholder={"Search"}
-                input={keyword}
-                onInputChange={(val) => {
-                  setKeyword(val);
-                }}
-              />
+            <div className="flex w-full justify-between">
+              <div className="w-full sm:w-96">
+                <CommonInput
+                  placeholder={"Search"}
+                  input={keyword}
+                  onInputChange={(val) => {
+                    setKeyword(val);
+                  }}
+                />
+              </div>
+              <div>{`${completed} / ${total} completed (${percentage}%)`}</div>
             </div>
 
             <div className="mt-3 overflow-x-auto">
@@ -208,7 +218,10 @@ export default function page() {
                           </td>
 
                           <td className="border ">
-                            {true ? (
+                            {item["updated_by"] == null ||
+                            item["updated_by"] == idUser ||
+                            parseInt(localStorage.getItem("userlevel"), 10) <=
+                              1 ? (
                               <div
                                 onClick={() => {
                                   setSelectedData({
@@ -414,7 +427,9 @@ export default function page() {
                       : item,
                   );
                   setFilterProduct(newproducts);
-
+                  setCompleted(result.summary["completed"]);
+                  setTotal(result.summary["total"]);
+                  setPercentage(result.summary["percentage"]);
                   setModalEdit(false);
                 }
               }

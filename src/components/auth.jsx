@@ -16,6 +16,7 @@ export default function UserAuth({ children }) {
         setLogin(true);
         console.log(result["username"]);
         localStorage.setItem("username", result["username"]);
+        localStorage.setItem("userlevel", result["userlevel"]);
       } else {
         setLogin(false);
       }
