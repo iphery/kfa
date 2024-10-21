@@ -9,6 +9,7 @@ import { CommonButton } from "@/components/button";
 import Navbar from "@/components/navbar";
 import UserAuth from "@/components/auth";
 import { CustomSelect } from "@/components/select";
+import { CiFilter } from "react-icons/ci";
 
 export default function page() {
   const get_token = async () => {
@@ -65,6 +66,7 @@ export default function page() {
   const [completed, setCompleted] = useState(0);
   const [total, setTotal] = useState(0);
   const [percentage, setPercentage] = useState(0);
+  const [empty, setEmpty] = useState(false);
 
   const get_product = async () => {
     const response = await fetch("https://lime.farmaguru.id/product", {
@@ -145,6 +147,18 @@ export default function page() {
     setFilterProduct(filterData);
   }, [keyword]);
 
+  useEffect(() => {
+    if (empty) {
+      const filterData = products.filter((item) => {
+        return item["updated_by"] == null;
+      });
+
+      setFilterProduct(filterData);
+    } else {
+      setFilterProduct(products);
+    }
+  }, [empty]);
+
   const formatdate = (isoDateString) => {
     const date = new Date(isoDateString);
     return date.toLocaleString("en-US", {
@@ -180,7 +194,16 @@ export default function page() {
                   }}
                 />
               </div>
-              <div>{`${completed} / ${total} completed (${percentage}%)`}</div>
+              <div>
+                {`${completed} / ${total} completed (${percentage}%)`}
+                <div
+                  onClick={() => {
+                    setEmpty(!empty);
+                  }}
+                >
+                  <CiFilter />
+                </div>
+              </div>
             </div>
 
             <div className="mt-3 overflow-x-auto">
